@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr" class="h-full bg-slate-50">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Taramè - Orientation Gabon</title>
+    <meta name="description" content="Progressive Web App d'orientation universitaire, guide e-Bourse DGBS, annuaire des grandes écoles et cours complets pour les étudiants et bacheliers gabonais." />
+    
+    <!-- OpenGraph / Social -->
+    <meta property="og:title" content="Taramè - Orientation Gabon" />
+    <meta property="og:description" content="Orientation universitaire, guide e-Bourse DGBS, annuaire des grandes écoles et cours complets pour étudiants et bacheliers gabonais." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/pwa-512x512.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- PWA & Mobile Meta Tags -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#009e60" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Taramè" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script>
+      (function() {
+        // Intercept Vite HMR WebSocket in cloud preview/iframe where HMR is disabled
+        if (typeof window !== 'undefined' && window.WebSocket) {
+          const OrigWebSocket = window.WebSocket;
+          function SafeWebSocket(url, protocols) {
+            const isViteHmr = 
+              protocols === 'vite-hmr' ||
+              (typeof protocols === 'string' && protocols.includes('vite-hmr')) ||
+              (Array.isArray(protocols) && protocols.includes('vite-hmr')) ||
+              (typeof url === 'string' && url.includes('token='));
+
+            if (isViteHmr) {
+              const dummy = new EventTarget();
+              dummy.url = url;
+              dummy.protocols = protocols;
+              dummy.readyState = 1; // WebSocket.OPEN
+              dummy.CONNECTING = 0;
+              dummy.OPEN = 1;
+              dummy.CLOSING = 2;
+              dummy.CLOSED = 3;
+              dummy.send = function() {};
+              dummy.close = function() {
+                dummy.readyState = 3;
+                dummy.dispatchEvent(new Event('close'));
+              };
+              setTimeout(function() {
+                dummy.dispatchEvent(new Event('open'));
+              }, 0);
+              return dummy;
+            }
+            return new OrigWebSocket(url, protocols);
+          }
+          SafeWebSocket.prototype = OrigWebSocket.prototype;
+          SafeWebSocket.CONNECTING = 0;
+          SafeWebSocket.OPEN = 1;
+          SafeWebSocket.CLOSING = 2;
+          SafeWebSocket.CLOSED = 3;
+          window.WebSocket = SafeWebSocket;
+        }
+
+        // Suppress any remaining HMR WebSocket error notifications
+        const origConsoleError = console.error;
+        console.error = function() {
+          for (let i = 0; i < arguments.length; i++) {
+            const arg = String(arguments[i] || '');
+            if (arg.includes('WebSocket') || arg.includes('vite-hmr') || arg.includes('failed to connect to websocket')) {
+              return;
+            }
+          }
+          origConsoleError.apply(console, arguments);
+        };
+
+        window.addEventListener('error', function(event) {
+          if (event && event.message && event.message.includes('WebSocket')) {
+            event.stopImmediatePropagation();
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          if (event && event.reason && String(event.reason.message || event.reason).includes('WebSocket')) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+          }
+        }, true);
+      })();
+    </script>
+  </head>
+  <body class="h-full text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
+    <div id="root" class="min-h-full"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Service Worker Registration for PWA Offline & Installability -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(function(registration) {
+              // Registration successful
+              registration.onupdatefound = function() {
+                var installingWorker = registration.installing;
+                if (installingWorker) {
+                  installingWorker.onstatechange = function() {
+                    if (installingWorker.state === 'installed') {
+                      if (navigator.serviceWorker.controller) {
+                        // Updated content available
+                        console.log('[Taramè PWA] Mise à jour prête.');
+                      } else {
+                        // Precached content available offline
+                        console.log('[Taramè PWA] Prêt pour le fonctionnement hors-ligne.');
+                      }
+                    }
+                  };
+                }
+              };
+            })
+            .catch(function(error) {
+              console.warn('[Taramè PWA] Enregistrement Service Worker indisponible:', error);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
+

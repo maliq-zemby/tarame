@@ -1,0 +1,6 @@
+{
+  "name": "Taramè - Orientation Gabon",
+  "description": "Progressive Web App d'orientation universitaire, guide e-Bourse DGBS, annuaire des grandes écoles et cours complets pour les étudiants et bacheliers gabonais.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

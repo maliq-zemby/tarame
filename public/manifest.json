@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "id": "/",
+  "name": "Taramè - Orientation Gabon",
+  "short_name": "Taramè",
+  "description": "Progressive Web App d'orientation universitaire, guide e-Bourse DGBS, annuaire des grandes écoles et cours complets pour les étudiants et bacheliers gabonais.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#009e60",
+  "background_color": "#064e3b",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Cours Complets",
+      "short_name": "Cours",
+      "description": "Accéder aux cours magistraux de la Licence 1 au Doctorat",
+      "url": "/?tab=cours",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Guide e-Bourse DGBS",
+      "short_name": "e-Bourse",
+      "description": "Simulateur et démarches de la bourse",
+      "url": "/?tab=ebourse",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Coach IA Mwali",
+      "short_name": "Coach",
+      "description": "Conseiller d'orientation universitaire Gabon",
+      "url": "/?tab=coach",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Annuaire des Écoles",
+      "short_name": "Écoles",
+      "description": "Universités publiques et grandes écoles privées",
+      "url": "/?tab=annuaire",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
